@@ -21,6 +21,8 @@ export default function useCustomers() {
     };
 
     const createCustomer = async (data) => {
+        errors.value = '';
+        
         try {
             await axios.post('/api/customers', data);
             await router.push({ name: 'customers.index' });
@@ -36,6 +38,7 @@ export default function useCustomers() {
     };
 
     const updateCustomer = async (id) => {
+        errors.value = '';
         try {
             await axios.put('/api/customers/'+ id, customer.value);
             await router.push({ name: 'customers.index' });
