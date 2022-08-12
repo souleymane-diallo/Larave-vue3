@@ -17,7 +17,7 @@ class CustomerController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return CustomerResource::collection(Customer::all());
+        return CustomerResource::collection(Customer::latest()->get());
     }
 
     /**
@@ -28,7 +28,18 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required',
+            'tel'  => 'required',
+            'is_favorite' => 'required|boolean'
+        ]);
+
+        Customer::create([
+            'name' => $request->name,
+            'tel' => $request->tel,
+            'is_favorite' => $request->is_favorite,
+        ]);
     }
 
     /**
@@ -39,7 +50,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return CustomerResource::make($customer);
     }
 
     /**
@@ -51,7 +62,13 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'tel'  => 'required',
+            'is_favorite' => 'required|boolean'
+        ]);
+
+        $customer->update($request->only(['name', 'tel', 'is_favorite']));
     }
 
     /**
