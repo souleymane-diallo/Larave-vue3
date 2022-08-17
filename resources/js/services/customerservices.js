@@ -1,4 +1,4 @@
-import axios from "axios";
+//import axios from "axios";
 import { ref } from "vue";
 import router from '../router';
 
@@ -22,7 +22,7 @@ export default function useCustomers() {
 
     const createCustomer = async (data) => {
         errors.value = '';
-        
+
         try {
             await axios.post('/api/customers', data);
             await router.push({ name: 'customers.index' });
@@ -53,6 +53,13 @@ export default function useCustomers() {
         }
     };
 
+    const destroyCustomer = async (id) => {
+        if (!window.confirm('Supprimer ce client ?')) return;
+
+        await axios.delete('/api/customers/' + id);
+        await getCustomers();
+    };
+
     return {
         customers,
         errors,
@@ -60,6 +67,7 @@ export default function useCustomers() {
         getCustomers,
         createCustomer,
         getCustomer,
-        updateCustomer
+        updateCustomer,
+        destroyCustomer
     }
 }

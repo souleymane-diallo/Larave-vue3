@@ -28,7 +28,7 @@
                 {{ errors.is_favorite[0] }}
             </div>
             <div class="py-3 bg-gray-50 text-right">
-                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white" style="background: blue;">Modifier un client</button>
+                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm bg-indigo-600 font-medium rounded-md text-white">Modifier un client</button>
             </div>
         </form>
     </div>

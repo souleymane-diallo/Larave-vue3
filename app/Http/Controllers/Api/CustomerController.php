@@ -7,6 +7,7 @@ use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
@@ -26,20 +27,22 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): CustomerResource
     {
 
         $request->validate([
             'name' => 'required',
             'tel'  => 'required',
-            'is_favorite' => 'required|boolean'
+            'is_favorite' => 'nullable|boolean'
         ]);
 
-        Customer::create([
+        $customer = Customer::create([
             'name' => $request->name,
             'tel' => $request->tel,
-            'is_favorite' => $request->is_favorite,
+            'is_favorite' => $request->is_favorite ?? 0,
         ]);
+
+        return new CustomerResource($customer);
     }
 
     /**
@@ -48,7 +51,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer): CustomerResource
     {
         return CustomerResource::make($customer);
     }
@@ -60,7 +63,7 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Customer $customer): CustomerResource
     {
         $request->validate([
             'name' => 'required',
@@ -69,6 +72,8 @@ class CustomerController extends Controller
         ]);
 
         $customer->update($request->only(['name', 'tel', 'is_favorite']));
+
+        return new CustomerResource($customer);
     }
 
     /**
@@ -77,8 +82,10 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer): Response
     {
-        //
+        $customer->delete();
+
+        return response()->noContent();
     }
 }

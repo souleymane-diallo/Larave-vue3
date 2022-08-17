@@ -1,14 +1,14 @@
 <template>
     <div class="flex flex-col">
-        <div class="flex">
-            <router-link :to="{name: 'customers.create'}" class="bg-green-500 px-2 py-1 text-white rounded" style="background: green; margin-bottom: 20px;">Créer un Client</router-link>
+        <div class="flex mb-4">
+            <router-link :to="{name: 'customers.create'}" class="bg-green-500 px-2 py-1 text-white rounded">Créer un Client</router-link>
         </div>
         <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
         <table class="w-full">
             <thead>
                 <tr>
                     <th
-                        class="px-6 py-3 text-xs text-red-800 font-medium leading-4  text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        class="px-6 py-3 text-xs font-medium leading-4  text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                         Nom</th>
                     <th
                         class="px-6 py-3 text-xs font-medium leading-4 text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
@@ -60,11 +60,13 @@
                     </td>
                     <td
                         class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                        <button type="button" @click="deleteCustomer(customer.id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
                     </td>
                     </tr>
                 </template>
@@ -82,12 +84,17 @@ import useCustomers from '../services/customerservices.js';
 
     export default {
         setup() {
-            const { customers, getCustomers } = useCustomers();
+            const { customers, getCustomers, destroyCustomer } = useCustomers();
+
+            const deleteCustomer = async(id) => {
+                await destroyCustomer(id);
+            };
 
             onMounted(getCustomers());
 
             return {
-                customers
+                customers,
+                deleteCustomer
             }
         }
     }
